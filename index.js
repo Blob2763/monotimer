@@ -15,6 +15,7 @@ const announcementElement = document.getElementById('announcement');
 const differenceElement = document.getElementById('difference');
 const averagesElement = document.getElementById('averages');
 const moreStatsElement = document.getElementById('more-stats');
+const footerElement = document.getElementById('footer');
 
 const toHide = [
     headerElement,
@@ -22,7 +23,8 @@ const toHide = [
     scrambleElement,
     differenceElement,
     averagesElement,
-    moreStatsElement
+    moreStatsElement,
+    footerElement
 ]
 
 // Populate localStorage
