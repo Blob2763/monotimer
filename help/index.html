@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cube timer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+        rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="IMG/favicon.png">
+
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.2/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel="stylesheet" href="../CSS/help.css">
+</head>
+
+<body>
+    <div id="header">
+        <span id="session-name">HELP</span>
+    </div>
+    <div id="content">
+        <h2>Using the timer</h2>
+        <p>
+            Press and hold <span class="key">space</span> for at least 0.3 seconds. Once you 
+            release <span class="key">space</span>, the timer will start. Once you have finised 
+            your solve, hit <span class="key">space</span> to stop the timer.
+        </p>
+
+        <h2>Editing a solve</h2>
+        <p>
+            At the moment, you can only edit the most recent solve. Here's the keyboard shortcuts 
+            to edit the most recent solve:
+
+            <table>
+                <tr><th>shortcut</th><th>action</th></tr>
+                <tr><td><span class="key">shift</span> + <span class="key">D</span></td><td>toggle DNF</td></tr>
+                <tr><td><span class="key">shift</span> + <span class="key">N</span></td><td>remove plus 2 and/or DNF</td></tr>
+                <tr><td><span class="key">shift</span> + <span class="key">P</span></td><td>toggle plus 2</td></tr>
+                <tr><td><span class="key">shift</span> + <span class="key">X</span></td><td>delete solve</td></tr>
+            </table>
+        </p>
+
+        <h2>Reading times</h2>
+        <p>
+            Here's how you can read the times.
+
+            <table>
+                <tr><th>time</th><th>explanation</th></tr>
+                <tr><td><span class="dnf">12.345</span></td><td>DNF</td></tr>
+                <tr><td><span class="normal">12.345</span></td><td>normal solve</td></tr>
+                <tr><td><span class="personal-best">12.345</span></td><td>personal best</td></tr>
+                <tr><td><span class="plus-2">14.345</span></td><td>plus 2</td></tr>
+            </table>
+        </p>
+    </div>
+</body>
+</html>
