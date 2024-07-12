@@ -27,6 +27,8 @@ const toHide = [
     footerElement
 ]
 
+const bigNumber = 999999999999999;
+
 // Populate localStorage
 if (!localStorage.sessions) {
     localStorage.sessions = JSON.stringify(
@@ -34,10 +36,10 @@ if (!localStorage.sessions) {
             'Session 1': {
                 'solves': [],
                 'bests': {
-                    'single': 999999999999999,
-                    'mo3': 999999999999999,
-                    'ao5': 999999999999999,
-                    'ao12': 999999999999999
+                    'single': bigNumber,
+                    'mo3': bigNumber,
+                    'ao5': bigNumber,
+                    'ao12': bigNumber
                 }
             }
         }
@@ -46,7 +48,7 @@ if (!localStorage.sessions) {
 
 // Gives a solve a score based on its time, and whether it is a DNF
 function solveScore(solve) {
-    return solve.time + solve.isDNF * 999999999999999;
+    return solve.time + solve.isDNF * bigNumber;
 }
 
 // Generate scramble
@@ -301,26 +303,26 @@ function average(recentSolves) {
     return sum / middleTimes.length;
 }
 
-function updateStats(sessionName) {
+function calculateStats(sessionName) {
     const sessionObject = getSession(sessionName);
     const solvesArray = sessionObject.solves;
 
     let solves = [];
 
     let times = [];
-    let bestSingle = 999999999999999;
+    let bestSingle = bigNumber;
     let bestSingles = [];
 
     let mo3s = [];
-    let bestMo3 = 999999999999999;
+    let bestMo3 = bigNumber;
     let bestMo3s = [];
 
     let ao5s = [];
-    let bestAo5 = 999999999999999;
+    let bestAo5 = bigNumber;
     let bestAo5s = [];
 
     let ao12s = [];
-    let bestAo12 = 999999999999999;
+    let bestAo12 = bigNumber;
     let bestAo12s = [];
 
     solvesArray.forEach(solve => {
@@ -401,23 +403,51 @@ function updateStats(sessionName) {
     bestAo12 = times.length >= 12 ? bestAo12 : '-';
     const currentAo12 = times.length >= 11 ? ao12s[ao12s.length - 1] : '-';
 
-    document.getElementById('best-single').innerText = formatDuration(bestSingle);
-    document.getElementById('current-single').innerText = formatDuration(currentSingle);
+    return {
+        'bestSingle': bestSingle,
+        'currentSingle': currentSingle,
+        'bestMo3': bestMo3,
+        'currentMo3': currentMo3,
+        'bestAo5': bestAo5,
+        'currentAo5': currentAo5,
+        'bestAo12': bestAo12,
+        'currentAo12': currentAo12
+    };
+}
 
-    document.getElementById('best-mo3').innerText = formatDuration(bestMo3);
-    document.getElementById('current-mo3').innerText = formatDuration(currentMo3);
-    document.getElementById('mo3').innerText = formatDuration(currentMo3);
-    if (currentMo3 !== '-') { document.getElementById('mo3').className = currentMo3 === bestMo3 ? 'best' : ''; }
+function updateStats(sessionName) {
+    const stats = calculateStats(sessionName);
 
-    document.getElementById('best-ao5').innerText = formatDuration(bestAo5);
-    document.getElementById('current-ao5').innerText = formatDuration(currentAo5);
-    document.getElementById('ao5').innerText = formatDuration(currentAo5);
-    if (currentAo5 !== '-') { document.getElementById('ao5').className = currentAo5 === bestAo5 ? 'best' : ''; }
+    // Update visuals
+    document.getElementById('best-single').innerText = formatDuration(stats.bestSingle);
+    document.getElementById('current-single').innerText = formatDuration(stats.currentSingle);
 
-    document.getElementById('best-ao12').innerText = formatDuration(bestAo12);
-    document.getElementById('current-ao12').innerText = formatDuration(currentAo12);
-    document.getElementById('ao12').innerText = formatDuration(currentAo12);
-    if (currentAo12 !== '-') { document.getElementById('ao12').className = currentAo12 === bestAo12 ? 'best' : ''; }
+    document.getElementById('best-mo3').innerText = formatDuration(stats.bestMo3);
+    document.getElementById('current-mo3').innerText = formatDuration(stats.currentMo3);
+    document.getElementById('mo3').innerText = formatDuration(stats.currentMo3);
+    if (stats.currentMo3 !== '-') { document.getElementById('mo3').className = stats.currentMo3 === stats.bestMo3 ? 'best' : ''; }
+
+    document.getElementById('best-ao5').innerText = formatDuration(stats.bestAo5);
+    document.getElementById('current-ao5').innerText = formatDuration(stats.currentAo5);
+    document.getElementById('ao5').innerText = formatDuration(stats.currentAo5);
+    if (stats.currentAo5 !== '-') { document.getElementById('ao5').className = stats.currentAo5 === stats.bestAo5 ? 'best' : ''; }
+
+    document.getElementById('best-ao12').innerText = formatDuration(stats.bestAo12);
+    document.getElementById('current-ao12').innerText = formatDuration(stats.currentAo12);
+    document.getElementById('ao12').innerText = formatDuration(stats.currentAo12);
+    if (stats.currentAo12 !== '-') { document.getElementById('ao12').className = stats.currentAo12 === stats.bestAo12 ? 'best' : ''; }
+
+    // Update localStorage
+    let sessionsObject = JSON.parse(localStorage.sessions);
+    let sessionObject = sessionsObject[sessionName];
+    let bestsObject = sessionObject.bests;
+
+    bestsObject.single = stats.bestSingle === '-' ? bigNumber : stats.bestSingle;
+    bestsObject.mo3 = stats.bestMo3 === '-' ? bigNumber : stats.bestMo3;
+    bestsObject.ao5 = stats.bestAo5 === '-' ? bigNumber : stats.bestAo5;
+    bestsObject.ao12 = stats.bestAo12 === '-' ? bigNumber : stats.bestAo12;
+
+    localStorage.sessions = JSON.stringify(sessionsObject);
 }
 
 function updateTimer(end = Date.now()) {
@@ -458,10 +488,10 @@ function newSession(sessionName) {
     sessionsObject[sessionName] = {
         'solves': [],
         'bests': {
-            'single': 999999999999999,
-            'mo3': 999999999999999,
-            'ao5': 999999999999999,
-            'ao12': 999999999999999
+            'single': bigNumber,
+            'mo3': bigNumber,
+            'ao5': bigNumber,
+            'ao12': bigNumber
         }
     }
 
@@ -625,7 +655,7 @@ document.addEventListener('keydown', function (event) {
                     handleDeleteSolve('Session 1');
                 }
                 break;
-            case 'N':
+            case 'O':
                 if (confirm('Are you sure you want to remove all markings on this solve? (Bring it back to normal)')) {
                     handleClearSolve('Session 1');
                 }
@@ -641,6 +671,7 @@ function handleDNF(sessionName) {
     editSolve(sessionName, getSession(sessionName).solves.length - 1, undefined, true);
 
     updateTimelist(sessionName);
+    updateStats(sessionName);
 }
 
 // Marks the most recent solve as a +2
@@ -648,6 +679,7 @@ function handlePlusTwo(sessionName) {
     editSolve(sessionName, getSession(sessionName).solves.length - 1, true, undefined);
 
     updateTimelist(sessionName);
+    updateStats(sessionName);
 }
 
 // Deletes the most recent solve
@@ -655,10 +687,12 @@ function handleDeleteSolve(sessionName) {
     deleteSolve(sessionName, getSession(sessionName).solves.length - 1);
 
     updateTimelist(sessionName);
+    updateStats(sessionName);
 }
 
 function handleClearSolve(sessionName) {
     editSolve(sessionName, getSession(sessionName).solves.length - 1, false, false);
 
     updateTimelist(sessionName);
+    updateStats(sessionName);
 }
