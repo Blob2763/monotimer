@@ -45,7 +45,7 @@ body div {
     background-color: var(--grey);
 }
 
-#header #session-name{
+#header #session-name {
     display: block;
 
     width: 100%;
@@ -73,7 +73,7 @@ body div {
 }
 
 span.key {
-    border:1px solid var(--light-grey);
+    border: 1px solid var(--light-grey);
     border-bottom: 3px solid var(--light-grey);
 
     border-radius: 4px;

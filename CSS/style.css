@@ -43,7 +43,7 @@ body div {
     background-color: var(--grey);
 }
 
-#header #session-name{
+#header #session-name {
     display: block;
 
     width: 100%;
@@ -290,7 +290,7 @@ body div {
     padding: 6px;
 
     font-size: 18pt;
-    
+
     background-color: var(--grey);
 
     color: var(--light-grey);
