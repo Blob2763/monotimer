@@ -37,6 +37,7 @@ if (!localStorage.sessions) {
                 'solves': [],
                 'bests': {
                     'single': bigNumber,
+                    'score': bigNumber * 2,
                     'mo3': bigNumber,
                     'ao5': bigNumber,
                     'ao12': bigNumber
@@ -99,12 +100,13 @@ document.addEventListener('keydown', function (event) {
             updateTimer(timerEnd);
 
             // Add time to localStorage
-            const isPersonalBest = timerDuration < getSession('Session 1').bests.single;
+            const isPersonalBest = timerDuration < getSession('Session 1').bests.score;
 
             newSolve('Session 1', timerDuration, false, false, isPersonalBest, scrambleElement.innerText);
 
             if (isPersonalBest) {
                 editBest('Session 1', 'single', timerDuration);
+                editBest('Session 1', 'score', timerDuration);
 
                 launchConfetti();
 
@@ -313,6 +315,10 @@ function calculateStats(sessionName) {
     let bestSingle = bigNumber;
     let bestSingles = [];
 
+    let scores = [];
+    let bestScore = bigNumber * 2;
+    let bestScores = [];
+
     let mo3s = [];
     let bestMo3 = bigNumber;
     let bestMo3s = [];
@@ -336,6 +342,15 @@ function calculateStats(sessionName) {
 
         bestSingles.push(bestSingle);
         times.push(currentTime);
+
+        // Scores
+        const currentScore = solve.score;
+        if (currentScore < bestScore) {
+            bestScore = currentScore
+        }
+
+        bestScores.push(bestScore);
+        scores.push(currentScore);
 
         // Means of 3
         let currentMo3;
@@ -394,6 +409,9 @@ function calculateStats(sessionName) {
     bestSingle = times.length > 0 ? bestSingle : '-';
     const currentSingle = times.length > 0 ? times[times.length - 1] : '-';
 
+    bestScore = times.length > 0 ? bestScore : '-';
+    const currentScore = times.length > 0 ? times[times.length - 1] : '-';
+
     bestMo3 = times.length >= 3 ? bestMo3 : '-';
     const currentMo3 = times.length >= 3 ? mo3s[mo3s.length - 1] : '-';
 
@@ -406,6 +424,8 @@ function calculateStats(sessionName) {
     return {
         'bestSingle': bestSingle,
         'currentSingle': currentSingle,
+        'bestScore': bestScore,
+        'currentScore': currentScore,
         'bestMo3': bestMo3,
         'currentMo3': currentMo3,
         'bestAo5': bestAo5,
@@ -443,6 +463,7 @@ function updateStats(sessionName) {
     let bestsObject = sessionObject.bests;
 
     bestsObject.single = stats.bestSingle === '-' ? bigNumber : stats.bestSingle;
+    bestsObject.score = stats.bestScore === '-' ? bigNumber * 2 : stats.bestScore;
     bestsObject.mo3 = stats.bestMo3 === '-' ? bigNumber : stats.bestMo3;
     bestsObject.ao5 = stats.bestAo5 === '-' ? bigNumber : stats.bestAo5;
     bestsObject.ao12 = stats.bestAo12 === '-' ? bigNumber : stats.bestAo12;
@@ -521,7 +542,8 @@ function newSolve(sessionName, finalTime, isPlusTwo, isDNF, isPersonalBest, scra
             'isPlusTwo': isPlusTwo,
             'isDNF': isDNF,
             'isPersonalBest': isPersonalBest,
-            'scramble': scramble
+            'scramble': scramble,
+            'score': solveScore({ 'time': finalTime + 2 * isPlusTwo, 'isDNF': isDNF })
         }
     );
 
@@ -583,6 +605,8 @@ function editSolve(sessionName, solveIdx, isPlusTwo, isDNF) {
         }
     }
 
+    solveObject.score = solveScore(solveObject);
+
     localStorage.sessions = JSON.stringify(sessionsObject);
 }
 
@@ -635,7 +659,6 @@ function launchConfetti() {
 
 // Handle user editing a solve
 // Event listener for keyboard shortcuts
-// Event listener for keyboard shortcuts
 document.addEventListener('keydown', function (event) {
     // Check if Shift key is pressed
     if (event.shiftKey) {
@@ -656,8 +679,8 @@ document.addEventListener('keydown', function (event) {
                 }
                 break;
             case 'O':
-                if (confirm('Are you sure you want to remove all markings on this solve? (Bring it back to normal)')) {
-                    handleClearSolve('Session 1');
+                if (confirm('Are you sure you want to mark this solve as OK?')) {
+                    handleOkSolve('Session 1');
                 }
                 break;
             default:
@@ -668,7 +691,7 @@ document.addEventListener('keydown', function (event) {
 
 // Marks the most recent solve as a DNF
 function handleDNF(sessionName) {
-    editSolve(sessionName, getSession(sessionName).solves.length - 1, undefined, true);
+    editSolve(sessionName, getSession(sessionName).solves.length - 1, false, true);
 
     updateTimelist(sessionName);
     updateStats(sessionName);
@@ -676,7 +699,7 @@ function handleDNF(sessionName) {
 
 // Marks the most recent solve as a +2
 function handlePlusTwo(sessionName) {
-    editSolve(sessionName, getSession(sessionName).solves.length - 1, true, undefined);
+    editSolve(sessionName, getSession(sessionName).solves.length - 1, true, false);
 
     updateTimelist(sessionName);
     updateStats(sessionName);
@@ -690,7 +713,8 @@ function handleDeleteSolve(sessionName) {
     updateStats(sessionName);
 }
 
-function handleClearSolve(sessionName) {
+// Removes any flags from the most recent solve
+function handleOkSolve(sessionName) {
     editSolve(sessionName, getSession(sessionName).solves.length - 1, false, false);
 
     updateTimelist(sessionName);

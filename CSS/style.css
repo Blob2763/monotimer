@@ -113,18 +113,6 @@ body div {
     color: var(--white);
 }
 
-#times table tr td.dnf {
-    color: var(--red);
-}
-
-#times table tr td.dnf::before {
-    content: "DNF (";
-}
-
-#times table tr td.dnf::after {
-    content: ")";
-}
-
 #times table tr td.plus-2 {
     color: var(--yellow);
 }
@@ -134,6 +122,18 @@ body div {
 }
 
 #times table tr td.plus-2::after {
+    content: ")";
+}
+
+#times table tr td.dnf {
+    color: var(--red);
+}
+
+#times table tr td.dnf::before {
+    content: "DNF (";
+}
+
+#times table tr td.dnf::after {
     content: ")";
 }
 
