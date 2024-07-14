@@ -47,6 +47,14 @@ if (!localStorage.sessions) {
     );
 }
 
+if (!localStorage.settings) {
+    localStorage.settings = JSON.stringify(
+        {
+            'timerHoldDuration': 300
+        }
+    );
+}
+
 // Gives a solve a score based on its time, and whether it is a DNF
 function solveScore(solve) {
     return solve.time + solve.isDNF * bigNumber;
@@ -151,7 +159,7 @@ document.addEventListener('keyup', function (event) {
             const holdDuration = spaceHeldEnd - spaceHeldStart;
             spaceHeldStart = 0;
 
-            if (holdDuration >= 300) {
+            if (holdDuration >= getSetting('timerHoldDuration')) {
                 // Spacebar has been held for long enough to start the timer
 
                 timerStart = spaceHeldEnd;
@@ -763,4 +771,11 @@ function handleOkSolve(sessionName) {
 
     updateTimelist(sessionName);
     updateStats(sessionName);
+}
+
+// Functions for settings
+function getSetting(settingName) {
+    const settingsObject = JSON.parse(localStorage.settings);
+
+    return settingsObject[settingName];
 }
