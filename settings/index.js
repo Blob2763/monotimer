@@ -1,5 +1,6 @@
 const defaults = {
-    'timerHoldDuration': 300
+    'timerHoldDuration': 300,
+    'decimalPlaces': 3,
 }
 
 // Populate inputs with current values
@@ -15,7 +16,7 @@ inputs.forEach(input => {
     input.addEventListener('input', (event) => {
         const inputId = event.target.id;
         const newValue = event.target.value;
-        
+
         setSetting(inputId, newValue);
     });
 });
@@ -26,9 +27,23 @@ function setDefault(settingName) {
 }
 
 function setSetting(settingName, value) {
+    const settingInputElement = document.getElementById(settingName);
+
+    if (value) {
+        const minValue = parseInt(settingInputElement.min);
+        const maxValue = parseInt(settingInputElement.max);
+        value = parseInt(value);
+
+        if (minValue !== NaN) { if (value < minValue) { value = minValue; } }
+        if (maxValue !== NaN) { if (value > maxValue) { value = maxValue; } }
+
+        settingInputElement.value = value;
+    } else {
+        value = defaults[settingName];
+    }
+
     const settingsObject = JSON.parse(localStorage.settings);
     settingsObject[settingName] = value;
-    document.getElementById(settingName).value = value;
     localStorage.settings = JSON.stringify(settingsObject);
 }
 

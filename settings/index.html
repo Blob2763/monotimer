@@ -29,7 +29,10 @@
         <h2>Timing</h2>
         <p>
             <label for="timerHoldDuration">Timer hold duration (ms)</label>
-            <input class="setting-input" type="number" id="timerHoldDuration"><button onclick="setDefault('timerHoldDuration')">DEFAULT</button>
+            <input class="setting-input" type="number" id="timerHoldDuration" min="0"><button onclick="setDefault('timerHoldDuration')">DEFAULT</button>
+            <br>
+            <label for="decimalPlaces">Timer accuracy (d.p.)</label>
+            <input class="setting-input" type="number" id="decimalPlaces" min="2" max="4"><button onclick="setDefault('decimalPlaces')">DEFAULT</button>
         </p>
 
         <p style="color: var(--light-grey);">More settings coming soon...</p>

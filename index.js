@@ -50,7 +50,8 @@ if (!localStorage.sessions) {
 if (!localStorage.settings) {
     localStorage.settings = JSON.stringify(
         {
-            'timerHoldDuration': 300
+            'timerHoldDuration': 300,
+            'decimalPlaces': 3,
         }
     );
 }
@@ -69,6 +70,9 @@ updateTimelist('Session 1');
 
 // Fill in time difference
 updateDifference('Session 1');
+
+// Fill in default time (could be replaced by most recent time)
+timerElement.innerText = formatDuration(0);
 
 // Fill in stats
 updateStats('Session 1');
@@ -90,7 +94,7 @@ document.addEventListener('keydown', function (event) {
         if (spaceHeldStart === 0 && timerStart === 0) {
             // Spacebar has not been held yet
 
-            spaceHeldStart = Date.now();
+            spaceHeldStart = performance.now();
         }
 
         if (timerStart !== 0 && timerEnd === 0) {
@@ -103,7 +107,7 @@ document.addEventListener('keydown', function (event) {
             let isAnnouncement = false;
 
             // Show final time
-            timerEnd = Date.now();
+            timerEnd = performance.now();
             timerDuration = timerEnd - timerStart;
             updateTimer(timerEnd);
 
@@ -155,7 +159,7 @@ document.addEventListener('keyup', function (event) {
         if (timerDuration === 0) {
             // Try to start the timer
 
-            spaceHeldEnd = Date.now();
+            spaceHeldEnd = performance.now();
             const holdDuration = spaceHeldEnd - spaceHeldStart;
             spaceHeldStart = 0;
 
@@ -191,26 +195,32 @@ function formatDuration(ms) {
         return ms;
     }
 
-    ms = Math.round(ms);
+    const microseconds = Math.round(ms * 1000) % 1000000;
+
+    let decimalPlaces = getSetting('decimalPlaces');
+    if (decimalPlaces < 2) { decimalPlaces = 2; }
+    if (decimalPlaces > 4) { decimalPlaces = 4; }
+
+    let fractionalPart = Math.round(microseconds / 10 ** (6 - decimalPlaces));
+    fractionalPart = fractionalPart.toString().padStart(decimalPlaces, '0');
+
     if (ms < 1000) {
         // If the duration is less than 1 second
 
-        return `0.${ms.toString().padStart(3, '0')}`;
+        return `0.${fractionalPart}`;
     } else if (ms < 60000) {
         // If the duration is less than 1 minute
 
         const seconds = Math.floor(ms / 1000);
-        const milliseconds = ms % 1000;
 
-        return `${seconds}.${milliseconds.toString().padStart(3, '0')}`;
+        return `${seconds}.${fractionalPart}`;
     } else {
         // If the duration is 1 minute or more
 
         const minutes = Math.floor(ms / 60000);
         const seconds = Math.floor((ms % 60000) / 1000);
-        const milliseconds = ms % 1000;
 
-        return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+        return `${minutes}:${seconds.toString().padStart(2, '0')}.${fractionalPart}`;
     }
 }
 
@@ -520,7 +530,7 @@ function updateStats(sessionName) {
     localStorage.sessions = JSON.stringify(sessionsObject);
 }
 
-function updateTimer(end = Date.now()) {
+function updateTimer(end = performance.now()) {
     timerDuration = end - timerStart;
     const formattedDuration = formatDuration(timerDuration);
     timerElement.innerText = formattedDuration;
