@@ -52,6 +52,7 @@ if (!localStorage.settings) {
         {
             'timerHoldDuration': 300,
             'decimalPlaces': 3,
+            'hasConfetti': true,
         }
     );
 }
@@ -120,7 +121,9 @@ document.addEventListener('keydown', function (event) {
                 editBest('Session 1', 'single', timerDuration);
                 editBest('Session 1', 'score', timerDuration);
 
-                launchConfetti();
+                if (getSetting('hasConfetti')) {
+                    launchConfetti();
+                }
 
                 isAnnouncement = true;
                 announcementElement.innerText = 'Session best single!';

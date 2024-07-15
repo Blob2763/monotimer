@@ -28,11 +28,27 @@
     <div id="content">
         <h2>Timing</h2>
         <p>
-            <label for="timerHoldDuration">Timer hold duration (ms)</label>
-            <input class="setting-input" type="number" id="timerHoldDuration" min="0"><button onclick="setDefault('timerHoldDuration')">DEFAULT</button>
+            <label for="timerHoldDuration">
+                Timer hold duration (ms)
+                <input class="setting-input" type="number" id="timerHoldDuration" min="0">
+                <button onclick="setDefault('timerHoldDuration')">DEFAULT</button>
+            </label>
             <br>
-            <label for="decimalPlaces">Timer accuracy (d.p.)</label>
-            <input class="setting-input" type="number" id="decimalPlaces" min="2" max="4"><button onclick="setDefault('decimalPlaces')">DEFAULT</button>
+            <label for="decimalPlaces">
+                Timer accuracy (d.p.)
+                <input class="setting-input" type="number" id="decimalPlaces" min="2" max="4">
+                <button onclick="setDefault('decimalPlaces')">DEFAULT</button>
+            </label>
+        </p>
+
+        <h2>Visuals</h2>
+        <p>
+            <label for="hasConfetti">
+                Confetti when you get a PB
+                <input class="setting-input" type="checkbox" id="hasConfetti">
+                <span class="checkmark"></span>
+                <button onclick="setDefault('hasConfetti')">DEFAULT</button>
+            </label>
         </p>
 
         <p style="color: var(--light-grey);">More settings coming soon...</p>

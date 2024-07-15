@@ -118,7 +118,8 @@ table tr td {
     background: var(--light-grey);
 }
 
-input,button {
+input,
+button {
     background-color: #00000000;
 
     border: 1px solid var(--light-grey);
@@ -148,4 +149,61 @@ button:active {
     border-bottom: 1px solid var(--light-grey);
 
     transform: translateY(1.6px);
+}
+
+/* Styling checkboxes */
+/* Hide the default checkbox */
+label input[type="checkbox"] {
+    display: none;
+}
+
+/* Style the label to contain the checkbox and align items */
+label {
+    display: flex;
+    align-items: center;
+    user-select: none;
+    position: relative;
+}
+
+/* Create a custom checkbox */
+label .checkmark {
+    height: 29px;
+    width: 29px;
+    
+    background-color: #00000000;
+
+    border: 1px solid var(--light-grey);
+    border-bottom: 3px solid var(--light-grey);
+    border-radius: 4px 0 0 4px;
+
+    position: relative;
+    margin-left: 8px;
+}
+
+/* On hover, add a grey background color */
+label:hover input~.checkmark {
+    background-color: #FFFFFF1B;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+label .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+label input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+label .checkmark:after {
+    left: 50%;
+    top: calc(50% - 1px);
+    width: 5px;
+    height: 10px;
+    border: solid var(--white);
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
 }
