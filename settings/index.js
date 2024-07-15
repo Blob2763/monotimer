@@ -8,13 +8,12 @@ const defaults = {
 Object.keys(defaults).forEach(settingName => {
     const settingInputElement = document.getElementById(settingName);
 
-    if (settingInputElement.type === 'checkbox') {
+    if (settingInputElement.type === 'checkbox') {  
         settingInputElement.checked = getSetting(settingName);
     } else if (settingInputElement.type === 'number') {
         settingInputElement.value = getSetting(settingName);
         settingInputElement.placeholder = defaults[settingName];
     }
-
 });
 
 // Listen for changes in any settings
