@@ -201,7 +201,7 @@ function formatDuration(ms) {
     if (decimalPlaces < 2) { decimalPlaces = 2; }
     if (decimalPlaces > 4) { decimalPlaces = 4; }
 
-    let fractionalPart = Math.round(microseconds / 10 ** (6 - decimalPlaces));
+    let fractionalPart = Math.floor(microseconds / 10 ** (6 - decimalPlaces));
     fractionalPart = fractionalPart.toString().padStart(decimalPlaces, '0');
 
     if (ms < 1000) {
