@@ -6,6 +6,11 @@ let timerEnd = 0;
 let timerDuration = 0;
 let timerInterval;
 
+let inspectionStart = 0;
+let inspectionEnd = 0;
+let inspectionDuration = 0;
+let inspectionInterval;
+
 const headerElement = document.getElementById('header');
 const timesElement = document.getElementById('times');
 const timesTableElement = document.getElementById('times-table')
@@ -91,9 +96,8 @@ if (solvesArray.length > 0) {
 document.addEventListener('keydown', function (event) {
     if (event.key === ' ') {
         // Spacebar pressed
-
-        if (spaceHeldStart === 0 && timerStart === 0) {
-            // Spacebar has not been held yet
+        if (spaceHeldStart === 0 && timerStart === 0 && inspectionStart !== 0) {
+            // Try to start the timer
 
             spaceHeldStart = performance.now();
         }
@@ -114,8 +118,14 @@ document.addEventListener('keydown', function (event) {
 
             // Add time to localStorage
             const isPersonalBest = timerDuration < getSession('Session 1').bests.score;
+            const isPlusTwo = inspectionDuration < 0 && inspectionDuration > -2000;
+            const isDNF = inspectionDuration < -2000;
 
-            newSolve('Session 1', timerDuration, false, false, isPersonalBest, scrambleElement.innerText);
+            if (isPlusTwo) {
+                timerDuration += 2000;
+            }
+
+            newSolve('Session 1', timerDuration, isPlusTwo, isDNF, isPersonalBest, scrambleElement.innerText);
 
             if (isPersonalBest) {
                 editBest('Session 1', 'single', timerDuration);
@@ -158,8 +168,11 @@ document.addEventListener('keydown', function (event) {
 document.addEventListener('keyup', function (event) {
     if (event.key === ' ') {
         // Spacebar released
-
-        if (timerDuration === 0) {
+        if (spaceHeldStart === 0 && timerStart === 0 && inspectionStart === 0) {
+            // Start inspection
+            inspectionInterval = setInterval(updateInspection, 1);
+            inspectionStart = performance.now();
+        } else if (timerStart === 0 && inspectionStart !== 0) {
             // Try to start the timer
 
             spaceHeldEnd = performance.now();
@@ -168,6 +181,11 @@ document.addEventListener('keyup', function (event) {
 
             if (holdDuration >= getSetting('timerHoldDuration')) {
                 // Spacebar has been held for long enough to start the timer
+
+                inspectionEnd = spaceHeldEnd;
+                inspectionDuration = inspectionEnd - inspectionStart;
+
+                clearInterval(inspectionInterval);
 
                 timerStart = spaceHeldEnd;
                 timerInterval = setInterval(updateTimer, 1);
@@ -188,19 +206,22 @@ document.addEventListener('keyup', function (event) {
             timerStart = 0;
             timerEnd = 0;
             timerDuration = 0;
+
+            inspectionStart = 0;
+            inspectionEnd = 0;
+            inspectionDuration = 0;
         }
     }
 });
 
 // Returns a time in the format mm:SS.XXX (capital letters are required digits)
-function formatDuration(ms) {
+function formatDuration(ms, decimalPlaces = getSetting('decimalPlaces')) {
     if (typeof ms === 'string') {
         return ms;
     }
 
     const microseconds = Math.round(ms * 1000) % 1000000;
 
-    let decimalPlaces = getSetting('decimalPlaces');
     if (decimalPlaces < 2) { decimalPlaces = 2; }
     if (decimalPlaces > 4) { decimalPlaces = 4; }
 
@@ -537,6 +558,19 @@ function updateTimer(end = performance.now()) {
     timerDuration = end - timerStart;
     const formattedDuration = formatDuration(timerDuration);
     timerElement.innerText = formattedDuration;
+}
+
+function updateInspection(end = performance.now()) {
+    inspectionDuration = 15000 - (end - inspectionStart);
+
+    if (inspectionDuration < 0 && inspectionDuration > -2000) {
+        timerElement.innerText = '+2';
+    } else if (inspectionDuration < -2000) {
+        timerElement.innerText = 'DNF';
+    } else {        
+        const formattedDuration = formatDuration(inspectionDuration, 2);
+        timerElement.innerText = formattedDuration;
+    }   
 }
 
 // Generates a scramble of a given length (default 20)
