@@ -304,3 +304,7 @@ body div {
 #footer button#settings:hover {
     color: var(--orange);
 }
+
+#footer button#github:hover {
+    color: var(--white);
+}

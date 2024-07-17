@@ -15,6 +15,7 @@
 
     <link rel='stylesheet'
         href='https://cdn-uicons.flaticon.com/2.4.2/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.4.2/uicons-brands/css/uicons-brands.css'>
     <link rel="stylesheet" href="CSS/style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -73,11 +74,15 @@
         </table>
     </div>
     <div id="footer">
-        <button id="help" title="Help" onclick="window.location.href='/monotimer/help'"><i
+        <button id="help" title="Help" onclick="window.open('/monotimer/help')"><i
                 class="fi fi-rr-interrogation"></i></button>
-        <button id="info" title="Info" onclick="window.location.href='/monotimer/info'"><i
+        <button id="info" title="Info" onclick="windowopen('/monotimer/info')"><i
                 class="fi fi-rr-info"></i></button>
-        <button id="settings" title="Settings" onclick="window.location.href='/monotimer/settings'"><i class="fi fi-rr-settings-sliders"></i></button>
+        <button id="settings" title="Settings" onclick="open('/monotimer/settings')"><i
+                class="fi fi-rr-settings-sliders"></i></button>
+        <button id="github" title="GitHub Repo"
+            onclick="window.open('https://github.com/Blob2763/monotimer')"><i
+                class="fi fi-brands-github"></i></button>
     </div>
 </body>
 
