@@ -99,7 +99,7 @@ if (solvesArray.length > 0) {
 document.addEventListener('keydown', function (event) {
     if (event.key === ' ') {
         // Spacebar pressed
-        if (spaceHeldStart === 0 && timerStart === 0 && inspectionStart !== 0) {
+        if (spaceHeldStart === 0 && timerStart === 0 && (inspectionStart !== 0 || !getSetting('inspectionDuration'))) {
             // Try to start the timer
 
             spaceHeldStart = performance.now();
@@ -171,7 +171,7 @@ document.addEventListener('keydown', function (event) {
 document.addEventListener('keyup', function (event) {
     if (event.key === ' ') {
         // Spacebar released
-        if (spaceHeldStart === 0 && timerStart === 0 && inspectionStart === 0) {
+        if (spaceHeldStart === 0 && timerStart === 0 && inspectionStart === 0 && getSetting('inspectionDuration')) {
             // Start inspection
             inspectionInterval = setInterval(updateInspection, 1);
             inspectionStart = performance.now();
@@ -181,7 +181,7 @@ document.addEventListener('keyup', function (event) {
                 element.style.visibility = 'hidden';
             });
             announcementElement.style.visibility = 'hidden';
-        } else if (timerStart === 0 && inspectionStart !== 0) {
+        } else if (timerStart === 0 && (inspectionStart !== 0 || !getSetting('inspectionDuration'))) {
             // Try to start the timer
 
             spaceHeldEnd = performance.now();
@@ -189,6 +189,12 @@ document.addEventListener('keyup', function (event) {
             spaceHeldStart = 0;
 
             if (holdDuration >= getSetting('timerHoldDuration')) {
+                // Hide each element except the timer
+                toHide.forEach(element => {
+                    element.style.visibility = 'hidden';
+                });
+                announcementElement.style.visibility = 'hidden';
+
                 // Spacebar has been held for long enough to start the timer
 
                 inspectionEnd = spaceHeldEnd;
