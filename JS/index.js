@@ -134,7 +134,7 @@ document.addEventListener('keydown', function (event) {
 
             // Add time to localStorage
             const isPersonalBest = timerDuration < getSession('Session 1').bests.score;
-            const isPlusTwo = inspectionDuration < 0 && inspectionDuration > -2000;
+            const isPlusTwo = inspectionDuration < 0 && inspectionDuration >= -2000;
             const isDNF = inspectionDuration < -2000;
 
             if (isPlusTwo) {
@@ -211,7 +211,7 @@ document.addEventListener('keyup', function (event) {
                 // Spacebar has been held for long enough to start the timer
 
                 inspectionEnd = spaceHeldEnd;
-                inspectionDuration = inspectionEnd - inspectionStart;
+                inspectionDuration = getSetting('inspectionDuration') - (inspectionEnd - inspectionStart);
 
                 clearInterval(inspectionInterval);
 
@@ -732,7 +732,6 @@ function editSolve(sessionName, solveIdx, isPlusTwo, isDNF) {
     localStorage.sessions = JSON.stringify(sessionsObject);
 
     updateStats(sessionName);
-    console.log(solveObject.score, getSession(sessionName).bests.score);
     const isPersonalBest = solveObject.score <= getSession(sessionName).bests.score;
     solveObject.isPersonalBest = isPersonalBest;
 
