@@ -172,6 +172,12 @@ document.addEventListener('keyup', function (event) {
             // Start inspection
             inspectionInterval = setInterval(updateInspection, 1);
             inspectionStart = performance.now();
+
+            // Hide each element except the timer
+            toHide.forEach(element => {
+                element.style.visibility = 'hidden';
+            });
+            announcementElement.style.visibility = 'hidden';
         } else if (timerStart === 0 && inspectionStart !== 0) {
             // Try to start the timer
 
@@ -189,12 +195,6 @@ document.addEventListener('keyup', function (event) {
 
                 timerStart = spaceHeldEnd;
                 timerInterval = setInterval(updateTimer, 1);
-
-                // Hide each element except the timer
-                toHide.forEach(element => {
-                    element.style.visibility = 'hidden'
-                });
-                announcementElement.style.visibility = 'hidden'
             }
         } else {
             // Timer has stopped and the user is releasing the spacebar
@@ -567,10 +567,10 @@ function updateInspection(end = performance.now()) {
         timerElement.innerText = '+2';
     } else if (inspectionDuration < -2000) {
         timerElement.innerText = 'DNF';
-    } else {        
+    } else {
         const formattedDuration = formatDuration(inspectionDuration, 2);
         timerElement.innerText = formattedDuration;
-    }   
+    }
 }
 
 // Generates a scramble of a given length (default 20)
