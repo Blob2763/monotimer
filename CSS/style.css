@@ -104,6 +104,10 @@ body div {
     border-collapse: collapse;
 }
 
+#times table tr.time-row:hover {
+    background-color: var(--light-grey);
+}
+
 #times table tr th,
 #times table tr td {
     border: 1px solid var(--black);
