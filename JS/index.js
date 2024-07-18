@@ -301,7 +301,7 @@ function updateTimelist(sessionName) {
         rowElement.appendChild(timeElement);
         rowElement.className = 'time-row'
         rowElement.onclick = function() {
-            window.open(`/solve/?session=${sessionName}&solveIdx=${i}`);
+            window.open(`/monotimer/solve/?session=${sessionName}&solveIdx=${i}`);
         };
 
         timesTableElement.appendChild(rowElement);
