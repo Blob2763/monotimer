@@ -11,6 +11,8 @@ let inspectionEnd = 0;
 let inspectionDuration = 0;
 let inspectionInterval;
 
+let currentScramble = '';
+
 const headerElement = document.getElementById('header');
 const timesElement = document.getElementById('times');
 const timesTableElement = document.getElementById('times-table')
@@ -68,8 +70,8 @@ function solveScore(solve) {
 }
 
 // Generate scramble
-const scramble = generateScramble().toString().replaceAll(',', ' ');
-scrambleElement.innerText = scramble;
+currentScramble = generateScramble().toString().replaceAll(',', ' ');
+scrambleElement.innerText = currentScramble;
 
 // Fill in time list
 updateTimelist('Session 1');
@@ -125,7 +127,7 @@ document.addEventListener('keydown', function (event) {
                 timerDuration += 2000;
             }
 
-            newSolve('Session 1', timerDuration, isPlusTwo, isDNF, isPersonalBest, scrambleElement.innerText);
+            newSolve('Session 1', timerDuration, isPlusTwo, isDNF, isPersonalBest, currentScramble);
 
             if (isPersonalBest) {
                 editBest('Session 1', 'single', timerDuration);
@@ -140,8 +142,8 @@ document.addEventListener('keydown', function (event) {
             }
 
             // Generate new scramble
-            const scramble = generateScramble().toString().replaceAll(',', ' ');
-            scrambleElement.innerText = scramble;
+            currentScramble = generateScramble().toString().replaceAll(',', ' ');
+            scrambleElement.innerText = currentScramble;
 
             // Update time list
             updateTimelist('Session 1');
