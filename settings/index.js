@@ -2,6 +2,7 @@ const defaults = {
     'timerHoldDuration': 300,
     'decimalPlaces': 3,
     'hasConfetti': true,
+    'inspectionDuration': 15000,
 }
 
 // Populate inputs with current values

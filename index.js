@@ -60,6 +60,7 @@ if (!localStorage.settings) {
             'timerHoldDuration': 300,
             'decimalPlaces': 3,
             'hasConfetti': true,
+            'inspectionDuration': 15000,
         }
     );
 }

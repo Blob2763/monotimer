@@ -69,7 +69,7 @@ body div {
 }
 
 #content p {
-    line-height: calc(12pt + 20px);
+    line-height: 12pt;
 }
 
 span.key {
