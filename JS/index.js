@@ -15,7 +15,7 @@ let currentScramble = '';
 
 const headerElement = document.getElementById('header');
 const timesElement = document.getElementById('times');
-const timesTableElement = document.getElementById('times-table')
+const timesTableElement = document.getElementById('times-table');
 const scrambleElement = document.getElementById('scramble-text');
 const timerElement = document.getElementById('timer-time');
 const announcementElement = document.getElementById('announcement');
@@ -32,7 +32,7 @@ const toHide = [
     averagesElement,
     moreStatsElement,
     footerElement
-]
+];
 
 const bigNumber = 999999999999999;
 
@@ -274,7 +274,7 @@ function formatDuration(ms, decimalPlaces = getSetting('decimalPlaces')) {
 function updateTimelist(sessionName) {
     const solvesArray = getSession(sessionName).solves;
 
-    timesTableElement.innerHTML = '<tr><th></th><th>time</th></tr>'
+    timesTableElement.innerHTML = '<tr><th></th><th>time</th></tr>';
 
     for (let i = 0; i < solvesArray.length; i++) {
         const solve = solvesArray[i];
@@ -288,18 +288,18 @@ function updateTimelist(sessionName) {
         timeElement.className += 'neutral '
         timeElement.innerText = formatDuration(solve.time);
         if (solve.isDNF) {
-            timeElement.className += 'dnf '
+            timeElement.className += 'dnf ';
         }
         if (solve.isPlusTwo) {
-            timeElement.className += 'plus-2 '
+            timeElement.className += 'plus-2 ';
         }
         if (solve.isPersonalBest) {
-            timeElement.className += 'personal-best '
+            timeElement.className += 'personal-best ';
         }
 
         rowElement.appendChild(numberElement);
         rowElement.appendChild(timeElement);
-        rowElement.className = 'time-row'
+        rowElement.className = 'time-row';
         rowElement.onclick = function() {
             window.open(`/monotimer/solve/?session=${sessionName}&solveIdx=${i}`);
         };
@@ -361,7 +361,7 @@ function average(recentSolves) {
     let bestScore;
     for (let i = 0; i < middleTimes.length; i++) {
         const solve = middleTimes[i];
-        const score = solveScore(solve)
+        const score = solveScore(solve);
 
         if (i === 0 || score < bestScore) {
             bestIdx = i;
@@ -409,7 +409,7 @@ function calculateStats(sessionName) {
         // Singles
         const currentTime = solve.isDNF ? 'DNF' : solve.time;
         if (currentTime < bestSingle || bestSingle === bigNumber || bestSingle === 'DNF') {
-            bestSingle = currentTime
+            bestSingle = currentTime;
         }
 
         bestSingles.push(bestSingle);
@@ -418,7 +418,7 @@ function calculateStats(sessionName) {
         // Scores
         const currentScore = solve.score;
         if (currentScore < bestScore) {
-            bestScore = currentScore
+            bestScore = currentScore;
         }
 
         bestScores.push(bestScore);
@@ -433,7 +433,7 @@ function calculateStats(sessionName) {
             // Check if any solve is a DNF
             recent3Solves.forEach(solve => {
                 if (solve.isDNF) {
-                    currentMo3 = 'DNF'
+                    currentMo3 = 'DNF';
                 }
             });
 
@@ -459,7 +459,7 @@ function calculateStats(sessionName) {
             // Check if any solve is a DNF
             recent5Solves.forEach(solve => {
                 if (solve.isDNF) {
-                    currentAo5 = 'DNF'
+                    currentAo5 = 'DNF';
                 }
             });
 
@@ -485,7 +485,7 @@ function calculateStats(sessionName) {
             // Check if any solve is a DNF
             recent12Solves.forEach(solve => {
                 if (solve.isDNF) {
-                    currentAo12 = 'DNF'
+                    currentAo12 = 'DNF';
                 }
             });
 
@@ -637,7 +637,7 @@ function newSession(sessionName) {
             'ao5': bigNumber,
             'ao12': bigNumber
         }
-    }
+    };
 
     localStorage.sessions = JSON.stringify(sessionsObject);
 }
@@ -684,7 +684,7 @@ function editBest(sessionName, bestType, value) {
     let sessionsObject = JSON.parse(localStorage.sessions);
     let sessionObject = sessionsObject[sessionName];
 
-    sessionObject.bests[bestType] = value
+    sessionObject.bests[bestType] = value;
 
     localStorage.sessions = JSON.stringify(sessionsObject);
 }
@@ -711,7 +711,7 @@ function editSolve(sessionName, solveIdx, isPlusTwo, isDNF) {
                 solveObject.time += 2000;
             }
         } else {
-            solveObject.isPlusTwo = false
+            solveObject.isPlusTwo = false;
 
             if (previousState) {
                 solveObject.time -= 2000;
@@ -724,7 +724,7 @@ function editSolve(sessionName, solveIdx, isPlusTwo, isDNF) {
         if (isDNF) {
             solveObject.isDNF = !solveObject.isDNF;
         } else {
-            solveObject.isDNF = false
+            solveObject.isDNF = false;
         }
     }
 
