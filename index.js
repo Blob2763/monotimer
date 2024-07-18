@@ -570,7 +570,7 @@ function updateTimer(end = performance.now()) {
 }
 
 function updateInspection(end = performance.now()) {
-    inspectionDuration = 15000 - (end - inspectionStart);
+    inspectionDuration = getSetting('inspectionDuration') - (end - inspectionStart);
 
     if (inspectionDuration < 0 && inspectionDuration > -2000) {
         timerElement.innerText = '+2';
