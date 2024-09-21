@@ -77,15 +77,18 @@ scrambleElement.innerText = currentScramble;
 // Hide announcements to start with (TODO: show previous announcement no matter what)
 announcementElement.style.visibility = 'hidden';
 
+// Initialize session name
+const currentSession = 'Session 1';
+
 // Regenerate things if the user re-focuses the tab. This allows for seamless setting changes
 document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'visible') {
-        updateText('Session 1');
+        updateText(currentSession);
     }
 });
 
 // Update times and stats
-updateText('Session 1');
+updateText(currentSession);
 
 
 function updateText(sessionName) {
@@ -133,7 +136,7 @@ document.addEventListener('keydown', function (event) {
             updateTimer(timerEnd);
 
             // Add time to localStorage
-            const isPersonalBest = timerDuration < getSession('Session 1').bests.score;
+            const isPersonalBest = timerDuration < getSession(currentSession).bests.score;
             const isPlusTwo = inspectionDuration < 0 && inspectionDuration >= -2000;
             const isDNF = inspectionDuration < -2000;
 
@@ -141,11 +144,11 @@ document.addEventListener('keydown', function (event) {
                 timerDuration += 2000;
             }
 
-            newSolve('Session 1', timerDuration, isPlusTwo, isDNF, isPersonalBest, currentScramble);
+            newSolve(currentSession, timerDuration, isPlusTwo, isDNF, isPersonalBest, currentScramble);
 
             if (isPersonalBest) {
-                editBest('Session 1', 'single', timerDuration);
-                editBest('Session 1', 'score', timerDuration);
+                editBest(currentSession, 'single', timerDuration);
+                editBest(currentSession, 'score', timerDuration);
 
                 if (getSetting('hasConfetti')) {
                     launchConfetti();
@@ -160,13 +163,13 @@ document.addEventListener('keydown', function (event) {
             scrambleElement.innerText = currentScramble;
 
             // Update time list
-            updateTimelist('Session 1');
+            updateTimelist(currentSession);
 
             // Update difference
-            updateDifference('Session 1');
+            updateDifference(currentSession);
 
             // Update stats
-            updateStats('Session 1');
+            updateStats(currentSession);
 
             // Show all hidden elements
             toHide.forEach(element => {
@@ -793,22 +796,22 @@ document.addEventListener('keydown', function (event) {
         switch (event.key) {
             case 'D':
                 if (confirm('Are you sure you want to mark this solve as DNF?')) {
-                    handleDNF('Session 1');
+                    handleDNF(currentSession);
                 }
                 break;
             case 'P':
                 if (confirm('Are you sure you want to add a +2 penalty to this solve?')) {
-                    handlePlusTwo('Session 1');
+                    handlePlusTwo(currentSession);
                 }
                 break;
             case 'X':
                 if (confirm('Are you sure you want to delete this solve? (This can not be undone)')) {
-                    handleDeleteSolve('Session 1');
+                    handleDeleteSolve(currentSession);
                 }
                 break;
             case 'O':
                 if (confirm('Are you sure you want to mark this solve as OK?')) {
-                    handleOkSolve('Session 1');
+                    handleOkSolve(currentSession);
                 }
                 break;
             default:
